@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Config/config.dart';
+import 'package:flutter_application_1/presentation/screens/domus/domus_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,21 +13,9 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorSchemeSeed: Colors.green
-      ) ,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Este es el Home'),
-        ),
-        body: Center(
-          child: FilledButton(
-            onPressed: () { }, 
-            child: Text('Hola mundo!')
-          ),
-        ),
-      ),
-    );
+      theme: AppTheme().getTheme(),
+      home: DomusScreen()
+          );
   }
 }
  
