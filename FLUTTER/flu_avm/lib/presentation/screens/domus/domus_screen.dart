@@ -1,19 +1,37 @@
 import 'dart:math' as math;
 
 import 'package:flu_avm/config/menu/menu_item.dart';
+import 'package:flu_avm/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 
-class DomusScreen extends StatelessWidget {
+class DomusScreen extends ConsumerWidget {
   const DomusScreen({super.key});
 
   @override
 
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    final bool estTenebris = ref.watch(estTenebrisModusProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Flu Avm App'),
+        actions: [
+          IconButton(
+            onPressed:(){
+              //ref.read(estTenebrisModusProvider.notifier).update((state) => !estTenebris);
+              ref.read(estTenebrisModusProvider.notifier).state = !estTenebris;
+            }, 
+         // icon: Icon(Icons.dark_mode_outlined)
+          icon: Icon(
+            estTenebris
+             ? Icons.dark_mode_outlined
+             : Icons.light_mode_outlined
+          ))
+        ],
       ),
       body: _DomusView(),
     );
@@ -58,10 +76,11 @@ class _PropriumListTile extends StatelessWidget {
       subtitle: Text(menuItem.subtitulus),
       trailing: Icon(Icons.arrow_forward_ios_rounded, color: colorum.primary),
       leading: CircleAvatar(
-        backgroundColor: Color.fromARGB(100,
-        math.Random().nextInt(255),
-        math.Random().nextInt(255),
-        math.Random().nextInt(255),
+        backgroundColor: Color.fromARGB(
+          Theme.of(context).brightness == Brightness.dark ? 200 : 100,
+          math.Random().nextInt(255),
+          math.Random().nextInt(255),
+          math.Random().nextInt(255),
         ),
         child: Icon(
           menuItem.icon,
@@ -69,7 +88,6 @@ class _PropriumListTile extends StatelessWidget {
         )
       ),
       onTap: () {
-
         context.push(menuItem.link);
       },
     ); 
