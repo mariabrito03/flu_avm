@@ -1,60 +1,28 @@
+import 'package:flu_avm/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
-/*
-class NumeratorScreens extends StatelessWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-  int counter = 0;
+class NumeratorScreens extends ConsumerWidget {
 
-  NumeratorScreens({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Numerator Screen'),
-      ),
-      body: Center(
-        child: Text('Valor: $counter', style: Theme.of(context).textTheme.titleLarge),
-      ),
-    floatingActionButton: FloatingActionButton(
-      onPressed: () {
-        counter++;
-        print(counter);
-      },
-       child: Icon(Icons.add),
-    ),
-
-    );
-  }
-}
-*/
-
-class NumeratorScreens extends StatefulWidget {
   const NumeratorScreens({super.key});
 
   @override
-  State<NumeratorScreens> createState() => _NumeratorScreensState();
-}
 
-class _NumeratorScreensState extends State<NumeratorScreens> {
- 
- int counter = 0;
+  Widget build(BuildContext context, WidgetRef ref) {
 
-
-  @override
-  Widget build(BuildContext context) {
+    final int clickNumerator = ref.watch(numeratorProvider);
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('Numerator Screen'),
       ),
       body: Center(
-        child: Text('Valor: $counter', style: Theme.of(context).textTheme.titleLarge),
+        child: Text('Valor: $clickNumerator', style: Theme.of(context).textTheme.titleLarge),
       ),
     floatingActionButton: FloatingActionButton(
       onPressed: () {
-        
-        setState(() {
-          counter++;
-        });
+        ref.read(numeratorProvider.notifier).state++;
       },
        child: Icon(Icons.add),
     ),
@@ -62,3 +30,5 @@ class _NumeratorScreensState extends State<NumeratorScreens> {
     );
   }
 }
+
+
