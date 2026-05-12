@@ -1,11 +1,77 @@
 
 import 'package:flu_avm/Config/config.dart';
 import 'package:flutter_riverpod/legacy.dart';
+// ignore: library_prefixes
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-final bandsProvider = StateNotifierProvider<BandsNotifier, List<Band>>((ref){
+// ignore: constant_identifier_names
+enum ServerStatus { Online, Offline, Connecting }
+
+final bandsProvider = StateNotifierProvider<BandsNotifier, BandsState>((ref){
   return BandsNotifier();
 });
 
+class BandsState {
+
+final ServerStatus serverStatus;
+final IO.Socket socket;
+final List<Band> bands;
+
+BandsState({
+  required this.serverStatus,
+  required this.socket,
+  required this.bands
+
+});
+
+BandsState copyWith({
+  ServerStatus? serverStatus,
+  IO.Socket? socket,
+  List<Band>? bands
+}) => BandsState(
+    serverStatus: serverStatus ?? this.serverStatus,
+    socket: socket ?? this.socket,
+    bands: bands ?? this.bands
+  );
+
+}
+
+class BandsNotifier extends StateNotifier<BandsState> {
+  BandsNotifier()
+  : super(BandsState(
+    serverStatus: ServerStatus.Connecting,
+    socket: IO.io(
+      'http://localhost:3000',
+      IO.OptionBuilder()
+        .setTransports(['websocket'])
+        .enableAutoConnect()
+        .build()),
+
+      bands: []
+  )){
+
+    _initConfig();
+
+  }
+
+  void _initConfig(){
+
+    state.socket.onConnect(( _ ){
+      state = state.copyWith(serverStatus: ServerStatus.Online);
+    
+    });
+
+    state.socket.onDisconnect(( _ ){
+      state = state.copyWith(serverStatus: ServerStatus.Offline);
+    });
+  }
+  
+}
+
+
+
+
+/*
 class BandsNotifier extends StateNotifier<List<Band>> {
   BandsNotifier() : super([
     Band(id: '1', nomen: 'OneDirection', numerusVotum: 5),
@@ -34,3 +100,4 @@ class BandsNotifier extends StateNotifier<List<Band>> {
   }
 
 }
+*/

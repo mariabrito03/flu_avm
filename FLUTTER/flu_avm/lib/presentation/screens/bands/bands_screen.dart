@@ -139,7 +139,7 @@ addereNovmBan(BuildContext context, WidgetRef ref) {
             ref.read(bandsProvider.notifier).addereBand(
               Band(id: DateTime.now().toString(), nomen: textumController.text, numerusVotum: 0)
             );
-  
+        context.pop();
           }
         ),
         CupertinoDialogAction(
