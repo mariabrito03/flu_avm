@@ -1,12 +1,17 @@
 
-import 'package:flutter/material.dart';
+// ignore_for_file: avoid_print
 
-class ComplereForm extends StatelessWidget {
+import 'package:flu_avm/Config/config.dart';
+import 'package:flu_avm/presentation/providers/providers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class ComplereForm extends ConsumerWidget {
   const ComplereForm({super.key});
 
     @override
 
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
 
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: 200),
@@ -30,7 +35,7 @@ class ComplereForm extends StatelessWidget {
             children: [
               TextField(
                 keyboardType: TextInputType.name,
-                onChanged: (value) => { },
+                onChanged: (value) => ref.read(formNomenProvider.notifier).state = value,
                 style:TextStyle(color: Colors.white, fontSize: 18),
                 decoration: InputDecoration(
                   hintText: 'Pon tu nombre',
@@ -86,7 +91,7 @@ class ComplereForm extends StatelessWidget {
               ),
               SizedBox(height: 16),
               FilledButton(
-                onPressed: () => { },
+                onPressed: () => _onFormSubmit(ref),
                 style: FilledButton.styleFrom(
                   backgroundColor: Colors.black45,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -99,8 +104,26 @@ class ComplereForm extends StatelessWidget {
       ),
     );
   }
-}
-/*
-CAMBIOS PARA HACER COMMIT
-*/
 
+
+// ignore: unused_element
+void _onFormSubmit(WidgetRef ref) {
+    
+    // ignore: unused_local_variable
+    final String nameValue = ref.read(formNomenProvider);
+    // ignore: unused_local_variable
+    final Color color = ref.read(formColorProvider);
+    // ignore: unused_local_variable
+    final String colorValue = exColorAdHex(color);
+
+    if (nameValue.isEmpty) return;
+
+    //TODO poner el marcador en el mapa
+
+    print('name: $nameValue, color: $colorValue');
+
+     
+
+
+  }
+}

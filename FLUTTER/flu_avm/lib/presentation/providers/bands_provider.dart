@@ -1,5 +1,6 @@
 import 'package:flu_avm/config/config.dart';
 import 'package:flutter_riverpod/legacy.dart';
+// ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 
