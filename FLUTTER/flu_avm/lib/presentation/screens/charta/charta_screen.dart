@@ -1,6 +1,8 @@
 
 import 'package:flu_avm/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+// ignore: unused_import
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class ChartaScreen extends StatefulWidget {
   const ChartaScreen({super.key});
@@ -10,6 +12,14 @@ class ChartaScreen extends StatefulWidget {
 }
 
 class _ChartaScreenState extends State<ChartaScreen> {
+
+  // ignore: unused_element
+  void _initializeCircleAnnotations(MapboxMap mapboxmap) { 
+
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,15 +29,20 @@ class _ChartaScreenState extends State<ChartaScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          ColoredBox(color: Colors.blueGrey,
-          child: Center(
-            child: Text(
-              'Mapa a pantalla completa',
-              style: TextStyle(color: Colors.white, fontSize: 30),
+          MapWidget(
+            key: const ValueKey('main_map'),
+            // ignore: deprecated_member_use
+            cameraOptions: CameraOptions(
+              center: Point(
+                coordinates: Position (-122.467895, 37.800126 ),
+                ),                
+                zoom: 14.5,
               ),
-          ),
-          ),
-          Align(
+              styleUri: MapboxStyles.MAPBOX_STREETS,
+              onMapCreated:  _initializeCircleAnnotations,
+            ),
+
+            const Align(
             alignment: Alignment.topRight,
             child: Padding(
               padding: EdgeInsets.all(12),
