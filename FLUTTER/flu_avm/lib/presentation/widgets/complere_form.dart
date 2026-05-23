@@ -131,7 +131,7 @@ void _onFormSubmit(WidgetRef ref) {
 
     if (nameValue.isEmpty) return;
 
-    //TODO poner el marcador en el mapa
+    ref.read(markerPositumProvider.notifier).state = true;
 
     print('name: $nameValue, color: $colorValue');
   }
