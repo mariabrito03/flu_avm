@@ -1,10 +1,14 @@
 
+// ignore_for_file: unnecessary_const
+
 import 'package:flu_avm/presentation/providers/providers.dart';
 import 'package:flu_avm/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // ignore: unused_import
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+
+
 
 class ChartaScreen extends ConsumerStatefulWidget {
   const ChartaScreen({super.key});
@@ -17,6 +21,8 @@ class _ChartaScreenState extends ConsumerState<ChartaScreen> {
 
   // ignore: unused_field
   CircleAnnotationManager? _circleAnnotationManager;
+  // ignore: unused_field
+  Cancelable? _dragCancelable;
 
 
   // ignore: unused_element
@@ -24,14 +30,35 @@ class _ChartaScreenState extends ConsumerState<ChartaScreen> {
   
   mapboxmap.annotations.createCircleAnnotationManager().then((manager) {
      _circleAnnotationManager = manager;
+
+     _setupDragListener(manager);
+
      _addereVelRenovaMarker();
     });
   }
+
+  // ignore: unused_element
+  void _setupDragListener(CircleAnnotationManager manager){
+
+    _dragCancelable?.cancel();
+    _dragCancelable = manager.dragEvents(
+      onChanged: (CircleAnnotation annotation) {
+        final pos = annotation.geometry.coordinates;
+        ref.read(coordsMarkerProvider.notifier).state = pos;
+      },
+      onEnd: (CircleAnnotation annotation) {
+        final pos = annotation.geometry.coordinates;
+        ref.read(coordsMarkerProvider.notifier).state = pos;
+        },
+      );
+    }
+
 
   Future<void> _addereVelRenovaMarker() async {
     final manager = _circleAnnotationManager;
     if (manager == null) return;
 
+    await manager.deleteAll();
 
     final placed  = ref.read(markerPositumProvider);
 
@@ -42,7 +69,7 @@ class _ChartaScreenState extends ConsumerState<ChartaScreen> {
 
 
     // ignore: unused_local_variable
-    final situs = Position(-122.467895, 37.800126);
+    final situs = ref.read(coordsMarkerProvider);
 
     // ignore: unused_local_variable
     final color = ref.read(formColorProvider);
@@ -64,6 +91,13 @@ class _ChartaScreenState extends ConsumerState<ChartaScreen> {
     }
   }
 
+
+  @override
+  void dispose() {
+    _dragCancelable?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -72,7 +106,7 @@ class _ChartaScreenState extends ConsumerState<ChartaScreen> {
         _addereVelRenovaMarker();
       }
     });
-    
+
     return Scaffold(
       appBar : AppBar(
         title: Text('Mapas'),
@@ -85,24 +119,28 @@ class _ChartaScreenState extends ConsumerState<ChartaScreen> {
             // ignore: deprecated_member_use
             cameraOptions: CameraOptions(
               center: Point(
-                coordinates: Position (-122.467895, 37.800126 ),
+                coordinates: initialisMarkerPositio,
                 ),                
                 zoom: 14.5,
               ),
               styleUri: MapboxStyles.MAPBOX_STREETS,
               onMapCreated:  _initiareCircleAnnotations,
             ),
-
-            const Align(
+            Align(
             alignment: Alignment.topRight,
             child: Padding(
-              padding: EdgeInsets.all(12),
-              child: ComplereForm()
-            ),
-          )
-        ],
-      ),
-    );
+              padding: const EdgeInsets.all(12),
+              child: ref.watch(markerPositumProvider)
+                  ? InformaUsoris(
+                      nomen: ref.watch(formNomenProvider),
+                      positio: ref.watch(coordsMarkerProvider),
+                      color: ref.watch(formColorProvider),
+                  ) : ComplereForm(),
+                ),
+               ),
+             ],
+          ),
+         );
    }
   }
         
