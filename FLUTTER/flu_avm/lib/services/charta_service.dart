@@ -3,7 +3,7 @@
 import 'dart:async';
 
 import 'package:flu_avm/Config/config.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+//import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' hide Position;
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 

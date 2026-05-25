@@ -1,4 +1,7 @@
 
+
+/*TEMPORAL: Pantalla de mapa desactivada para desarrollo en Chrome
+// Para reactivar: borrar el widget temporal de abajo y descomentar todo el bloque original
 // ignore_for_file: unnecessary_const
 
 import 'package:flu_avm/Config/config.dart';
@@ -203,4 +206,29 @@ class _ChartaScreenState extends ConsumerState<ChartaScreen> {
          );
    }
   }
-        
+*/
+import 'package:flutter/material.dart';
+
+class ChartaScreen extends StatelessWidget {
+  const ChartaScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Mapas')),
+      body: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.map_outlined, size: 64, color: Colors.grey),
+            SizedBox(height: 16),
+            Text('Mapa desactivado temporalmente',
+                style: TextStyle(color: Colors.grey)),
+            Text('(solo disponible en Android/iOS)',
+                style: TextStyle(color: Colors.grey, fontSize: 12)),
+          ],
+        ),
+      ),
+    );
+  }
+}
