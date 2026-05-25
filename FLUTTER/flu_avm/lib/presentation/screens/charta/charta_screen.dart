@@ -1,6 +1,7 @@
 
 // ignore_for_file: unnecessary_const
 
+import 'package:flu_avm/Config/config.dart';
 import 'package:flu_avm/presentation/providers/providers.dart';
 import 'package:flu_avm/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -41,14 +42,20 @@ class _ChartaScreenState extends ConsumerState<ChartaScreen> {
   void _setupDragListener(CircleAnnotationManager manager){
 
     _dragCancelable?.cancel();
+
+    // ignore: unused_local_variable
+    final socketService = ref.read(socketServiceProvider);
+
     _dragCancelable = manager.dragEvents(
       onChanged: (CircleAnnotation annotation) {
         final pos = annotation.geometry.coordinates;
         ref.read(coordsMarkerProvider.notifier).state = pos;
+        socketService.mitterePositio(pos);
       },
       onEnd: (CircleAnnotation annotation) {
         final pos = annotation.geometry.coordinates;
         ref.read(coordsMarkerProvider.notifier).state = pos;
+        socketService.mitterePositio(pos);
         },
       );
     }
@@ -62,6 +69,7 @@ class _ChartaScreenState extends ConsumerState<ChartaScreen> {
 
     final placed  = ref.read(markerPositumProvider);
 
+/*
     if (!placed) {
       await manager.deleteAll();
       return;
@@ -75,13 +83,7 @@ class _ChartaScreenState extends ConsumerState<ChartaScreen> {
     final color = ref.read(formColorProvider);
 
     // ignore: unused_local_variable
-    final optiones = CircleAnnotationOptions(
-      geometry: Point (coordinates: situs),
-      circleColor: color.toARGB32(),
-      circleRadius: 14.0,
-      circleStrokeColor: Colors.white.toARGB32(),
-      isDraggable: true,
-    );
+
 
     try {
       await manager.create(optiones);
@@ -89,6 +91,58 @@ class _ChartaScreenState extends ConsumerState<ChartaScreen> {
       catch (e) {
         debugPrint('Error al crear marcador : $e');
     }
+    */
+
+    if (placed){
+      final situs = ref.read(coordsMarkerProvider);
+      final color = ref.read(formColorProvider);
+
+      // ignore: unused_local_variable
+      final optiones = CircleAnnotationOptions(
+        geometry: Point (coordinates: situs),
+        circleColor: color.toARGB32(),
+        circleRadius: 14.0,
+        circleStrokeColor: Colors.white.toARGB32(),
+        isDraggable: true,
+
+    );
+    
+    try {
+      await manager.create(optiones);
+    }catch (e) {
+      debugPrint('Error al crear marcador : $e');
+    }
+   }
+
+   // ignore: unused_local_variable
+  final aliiRudi = ref.read(aliisUsoresProvider).value ?? [];
+
+   // ignore: unused_local_variable
+   final meusId = ref.watch(socketServiceProvider).meusSocketId;
+
+  // ignore: unused_local_variable
+   final alii = aliiRudi.where((u) => u.id != meusId).toList();
+
+   for (final usor in alii){
+    // ignore: unused_local_variable
+    final usorColor = adHexExColor(usor.colorhex);
+
+      // ignore: unused_local_variable
+      final aliaOptionen = CircleAnnotationOptions(
+        geometry: Point (coordinates: usor.positio),
+        circleColor: usorColor.toARGB32(),
+        circleRadius: 14.0,
+        circleStrokeColor: Colors.white.toARGB32(),
+        isDraggable: false,
+      );
+      try {
+        await manager.create(aliaOptionen);
+      }catch (e) {
+        debugPrint('Error al crear marcador de otros usuarios ${usor.nomen} : $e');
+      }
+   }
+  
+
   }
 
 
@@ -106,6 +160,12 @@ class _ChartaScreenState extends ConsumerState<ChartaScreen> {
         _addereVelRenovaMarker();
       }
     });
+  
+    ref.listen(aliisUsoresProvider , (prev, next) {
+        _addereVelRenovaMarker();
+      
+     });
+
 
     return Scaffold(
       appBar : AppBar(

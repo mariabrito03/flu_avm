@@ -131,6 +131,16 @@ void _onFormSubmit(WidgetRef ref) {
 
     if (nameValue.isEmpty) return;
 
+    final socketService = ref.read(socketServiceProvider);
+
+    socketService.conectare();
+
+    socketService.mittereUsor(
+      nomen: nameValue,
+      colorHex: colorValue,
+      positio: ref.read(coordsMarkerProvider),
+    );
+
     ref.read(markerPositumProvider.notifier).state = true;
 
     print('name: $nameValue, color: $colorValue');
