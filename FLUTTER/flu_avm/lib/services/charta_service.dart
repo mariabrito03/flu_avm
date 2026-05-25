@@ -1,12 +1,36 @@
 
 // ignore: library_prefixes, unused_import
+import 'dart:async';
+
+import 'package:flu_avm/Config/config.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+// ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+
+// Contrato Socket.IO con el backend:
+// - Cliente emite 'CLIENT_REGISTER': { nomen, color (hex), lng, lat }
+// - Cliente emite 'CLIENT_MOVE': { lng, lat }
+// - Servidor emite 'CLIENT_JOINED': { id, nomen, color, lng, lat }
+// - Servidor emite 'CLIENT_LEFT': { id }
+// - Servidor emite 'CLIENT_MOVED': { id, lng, lat }
+// - Servidor emite 'GET_CLIENTS': [ { id, nomen, color, lng, lat }, ... ]
 
 
 class ChartaService {
 
   // ignore: unused_field
   IO.Socket? _socket;
+
+  // ignore: unused_field
+  final Map<String, Usor> _usores = {};
+
+  // ignore: unused_field
+  late final StreamController<List<Usor>> _usoresController;
+
+  ChartaService() {
+    _usoresController = StreamController<List<Usor>>.broadcast();
+  }
 
   void conectare(){
     _socket = IO.io('https://192.168.1.129:3200',
@@ -17,19 +41,48 @@ class ChartaService {
 
       _socket!.onConnect((_) {
       _socket!.on('CLIENT_JOINED', (payload) {
-        //TODO: Al usuario que haya llegado lo meteré en el almacén para verlo en pantalla
+        
+        // ignore: unused_local_variable
+        final usor = Usor.fromJson(Map<String, dynamic>.from(payload));
+
+        _usores[usor.id] = usor;
+
+        _usoresListenRenovare();
+
       });
 
       _socket!.on('CLIENT_LEFT', (payload) {
-        //TODO: Borraré ese usuario del almacén y desaparecerá de la pantalla
+       
+      final id = payload['id'] as String;
+      _usores.remove(id);
+      _usoresListenRenovare();
+
+
       });
 
        _socket!.on('CLIENT_MOVED', (payload) {
-        //TODO: Cambiaré la posición del usuario
+        // ignore: unused_local_variable
+        final map = Map<String, dynamic>.from(payload);
+        // ignore: unused_local_variable
+        final id = map['id'] as String;
+        // ignore: unused_local_variable
+        final lng = map['lng'] as double ;
+        // ignore: unused_local_variable
+        final lat = map['lat'] as double ;
+
+        _usores[id] = _usores[id]!.copyWith(positio: Position(lng, lat));
+        _usoresListenRenovare();
+     
       });
 
         _socket!.on('GET_CLIENTS', (payload) {
-        //TODO: Le llega la lista de clientes
+        _usores.clear();
+
+        for (final item in payload) {
+          final usor = Usor.fromJson(item);
+          _usores[usor.id] = usor;
+        }
+        _usoresListenRenovare();
       });
 
 
@@ -39,11 +92,20 @@ class ChartaService {
     _socket!.connect();
   }
 
+  // ignore: unused_element
+  void _usoresListenRenovare() {
+    _usoresController.add(List.from(_usores.values));
+  }
+
 
   void finire(){
     _socket!.disconnect();
     _socket?.dispose();
     _socket = null;
+    _usores.clear();
+    _usoresController.add([]);
+    _usoresController.close();
+
     
   }
 }
