@@ -7,6 +7,12 @@ import 'package:flu_avm/presentation/screens/screens.dart';
 final appRouter = GoRouter(
   initialLocation: '/',
   routes: [
+
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const WelcomeScreen(),
+    ),
+
     GoRoute(
       path: '/',
       builder: (context, state) => const DomusScreen(),
