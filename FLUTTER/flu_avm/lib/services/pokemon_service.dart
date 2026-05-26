@@ -1,21 +1,24 @@
 
-// ignore: unused_import
 import 'package:dio/dio.dart';
-import 'package:flu_avm/presentation/providers/providers.dart';
+import 'package:flu_avm/mappers/pokemon_mapper.dart';
 
 class PokemonService {
 
   // ignore: strict_top_level_inference, avoid_types_as_parameter_names
-  static getPokemon<String>(String pokemon) async {
+  static getPokemon<String>(String pokemonId) async {
 
     final dio = Dio();
 
     try {
-      final responsio = await dio.get('https://pokeapi.co/api/v2/pokemon/$pokemonIdsProvider');
-      final pokemonData = responsio.data;
-      return pokemonData;
+      final responsio = await dio.get('https://pokeapi.co/api/v2/pokemon/$pokemonId');
+
+      final pokemon = PokemonMapper.pokeApiPokemonToEntity(responsio.data);
+
+      return (pokemon, 'Data obtenida corréctamente');
+
     } catch (e) {
-      return e;
+
+      return (null, 'No se pudo obtener el Pokemon');
     }
 
   }
