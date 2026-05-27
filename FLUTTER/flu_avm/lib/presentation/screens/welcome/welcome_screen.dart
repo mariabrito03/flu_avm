@@ -39,21 +39,22 @@ class WelcomeScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
               // Badge WS
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: const Text('WS', style: TextStyle(fontWeight: FontWeight.bold)),
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(6),
                   ),
+                  child: const Text('WS', style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
+              ),
 
               const SizedBox(height: 12),
 
-              // Imágenes: móvil — puntos — servidor
+              // Imágenes
               SizedBox(
                 height: 160,
                 child: Row(
@@ -87,9 +88,92 @@ class WelcomeScreen extends ConsumerWidget {
                   ],
                 ),
               ),
+
+              const SizedBox(height: 16),
+
+              // Título y descripción
+              const Text(
+                'WebSockets en vivo',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                'Aprende a construir apps con datos en tiempo real en Flutter. '
+                'Dos ejemplos prácticos te esperan dentro.',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Tarjetas mapa y votaciones
+              Row(
+                children: [
+                  Expanded(
+                    child: _FeatureCard(
+                      image: 'assets/mapa.jpg',
+                      title: 'Mapas',
+                      subtitle: 'Ubicación en tiempo real',
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _FeatureCard(
+                      image: 'assets/votaciones.jpg',
+                      title: 'Votaciones',
+                      subtitle: 'Gráfico que se actualiza',
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _FeatureCard extends StatelessWidget {
+  final String image;
+  final String title;
+  final String subtitle;
+
+  const _FeatureCard({
+    required this.image,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      clipBehavior: Clip.hardEdge,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.asset(
+            image,
+            height: 100,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title,
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(subtitle,
+                    style: const TextStyle(fontSize: 11, color: Colors.grey)),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
