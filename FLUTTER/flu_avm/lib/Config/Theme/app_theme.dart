@@ -7,7 +7,7 @@ class AppTheme {
   final bool tenebrisModusEst;
 
   AppTheme({
-    this.electusColor = const Color.fromARGB(255, 20, 11, 105),
+    this.electusColor = const Color.fromARGB(255, 113, 98, 194),
     this.tenebrisModusEst = false
       });
 
