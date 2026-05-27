@@ -33,7 +33,31 @@ class WelcomeScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: const Center(child: Text('Pagina de bienvenida')),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+        SizedBox(
+          height: 160,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset('assets/movil.png', height: 130),
+              Image.asset('assets/puntos.png', height: 40),
+              Image.asset('assets/servidor.png', height: 130),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 200),
+        const Center(child: Text('Página de inicio')),
+      ],
+    ),
+  ),
+),
     );
   }
 }

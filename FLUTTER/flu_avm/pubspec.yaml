@@ -33,3 +33,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/iconos/
+    - assets/
+    - assets/movil.png
+    - assets/puntos.png
+    - assets/servidor.png
+    - assets/mapa.jpg
+    - assets/votaciones.jpg
