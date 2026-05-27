@@ -64,7 +64,7 @@ Widget build(BuildContext context) {
       SliverAppBar(
         floating: true,
         title: Text('Pokemons'),
-        backgroundColor: Theme.of(context).secondaryHeaderColor.withValues(alpha: 0.5),
+        backgroundColor: Theme.of(context).secondaryHeaderColor.withValues(alpha: 0.6),
       ),
       _PokemonGrid(), // SliverAppBar
       ],

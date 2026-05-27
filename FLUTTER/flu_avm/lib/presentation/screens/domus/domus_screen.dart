@@ -33,7 +33,24 @@ class DomusScreen extends ConsumerWidget {
           ))
         ],
       ),
-      body: _DomusView(),
+      body: Column(
+          children: [
+            // Imagen Valencia
+            Image.asset(
+              'assets/valencia.jpg',
+              width: double.infinity,
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+            // Lista de pantallas
+            Expanded(
+               child: Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: _DomusView(),
+              ),
+            ),
+          ],
+        ),
     );
   }
 }
