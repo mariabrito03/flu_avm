@@ -48,5 +48,12 @@ final appRouter = GoRouter(
         ), // GoRoute
       ],
     ),
+      GoRoute(
+    path: '/juegos-chicas',
+    builder: (context, state) => const JuegosChicasScreen(),
+  ),
+
   ],
 );
+
+

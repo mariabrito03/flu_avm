@@ -44,6 +44,11 @@ const appMenuItems = <MenuItem>[
     link: '/request',
     icon: Icons.catching_pokemon),
 
-
+    MenuItem(
+      titulus: 'Juegos Chicas',
+      subtitulus: 'Minijuego con Flame',
+      link: '/juegos-chicas',
+      icon: Icons.games,
+    ),
 
 ];
