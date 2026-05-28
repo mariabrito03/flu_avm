@@ -7,8 +7,10 @@ environment:
   sdk: ^3.11.3
 
 dependencies:
+  audioplayers: ^6.6.0
   dio: ^5.9.2
   flame: ^1.37.0
+  flame_audio: ^2.12.1
   flutter:
     sdk: flutter
   flutter_riverpod: ^3.3.1
@@ -37,3 +39,5 @@ flutter:
     - assets/iconos/
     - assets/
     - assets/videos/
+    - assets/images/
+    - assets/audio/

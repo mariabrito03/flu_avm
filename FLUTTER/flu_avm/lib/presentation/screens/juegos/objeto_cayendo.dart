@@ -24,7 +24,7 @@ class ObjetoCayendo extends SpriteComponent with HasGameReference<FlameGame> {
   @override
   Future<void> onLoad() async {
     sprite = await game.loadSprite(nombreAsset);
-    size = Vector2(60, 60);
+    size = Vector2(150, 150);
     position = Vector2(posicionX, -60);
   }
 

@@ -48,18 +48,16 @@ final appRouter = GoRouter(
         ), // GoRoute
       ],
     ),
-      GoRoute(
+    GoRoute(
     path: '/juegos-chicas',
     builder: (context, state) => const JuegosChicasScreen(),
   ),
-
-/*
    
-   GoRoute(
+    GoRoute(
     path: '/juego-bebe',
     builder: (context, state) => const JuegoBebeScreen(),
   ),
-*/
+
   ],
 );
 

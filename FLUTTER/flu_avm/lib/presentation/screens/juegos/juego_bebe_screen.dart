@@ -1,69 +1,193 @@
-import 'dart:math';
 import 'package:flame/game.dart';
-import 'package:flame/components.dart';
-import 'package:flame/events.dart';
-import 'package:flu_avm/presentation/screens/juegos/objeto_cayendo.dart';
-// ignore: unused_import
 import 'package:flutter/material.dart';
-
-class CatchGame extends FlameGame with HorizontalDragDetector {
-  
-  late SpriteComponent bebe;
-  final Random _random = Random();
-  int puntuacion = 0;
-  int vidas = 3;
-  bool juegoTerminado = false;
-
+import 'package:go_router/go_router.dart';
+import 'catch_game.dart';
+import 'game_hud.dart';
+ 
+class JuegoBebeScreen extends StatefulWidget {
+  const JuegoBebeScreen({super.key});
+ 
   @override
-  Future<void> onLoad() async {
-    // Fondo
-    final fondoSprite = await loadSprite('cocina.jpg');
-    add(SpriteComponent(
-      sprite: fondoSprite,
-      size: size,
-      position: Vector2.zero(),
-    ));
-
-    // Jugador (bebé)
-    final bebeSprite = await loadSprite('bebe.png');
-    bebe = SpriteComponent(
-      sprite: bebeSprite,
-      size: Vector2(100, 100),
-      position: Vector2(size.x / 2 - 50, size.y - 130),
+  State<JuegoBebeScreen> createState() => _JuegoBebeScreenState();
+}
+ 
+class _JuegoBebeScreenState extends State<JuegoBebeScreen> {
+  late CatchGame _game;
+ 
+  @override
+  void initState() {
+    super.initState();
+    _game = CatchGame();
+  }
+ 
+  void _reiniciar() {
+    setState(() {
+      _game = CatchGame();
+    });
+  }
+ 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GameWidget(
+        game: _game,
+        overlayBuilderMap: {
+ 
+          // HUD — volver + puntuación + vidas + pause en una sola fila
+          'hud': (context, game) => GameHud(game: game as CatchGame),
+ 
+          // Menú de pausa
+          'pauseMenu': (context, game) => Center(
+            child: Container(
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: Colors.pink.shade50,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.pink, width: 2),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    '⏸ Pausa',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.pink,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      (game as CatchGame).resumeEngine();
+                      game.overlays.remove('pauseMenu');
+                    },
+                    icon: const Icon(Icons.play_arrow),
+                    label: const Text('Continuar'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.pink,
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(180, 48),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  OutlinedButton.icon(
+                    onPressed: () {
+                      (game as CatchGame).resumeEngine();
+                      _reiniciar();
+                    },
+                    icon: const Icon(Icons.refresh, color: Colors.pink),
+                    label: const Text(
+                      'Reiniciar',
+                      style: TextStyle(color: Colors.pink),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Colors.pink),
+                      minimumSize: const Size(180, 48),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextButton(
+                    onPressed: () => context.go('/juegos-chicas'),
+                    child: const Text('Volver al menú'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+ 
+          // Game Over
+          'gameOver': (context, game) => Center(
+            child: Container(
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: Colors.pink.shade100,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    '💔 Game Over',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.pink,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Puntuación: ${(game as CatchGame).puntuacion}',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton.icon(
+                    onPressed: _reiniciar,
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Volver a jugar'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.pink,
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextButton(
+                    onPressed: () => context.go('/juegos-chicas'),
+                    child: const Text('Volver al menú'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+ 
+          // Victoria
+          'victoria': (context, game) => Center(
+            child: Container(
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: Colors.yellow.shade100,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.pink, width: 3),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    '¡Oleeeeeeeeee!',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.pink,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    '¡Victoria, el bebote está contento!',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton.icon(
+                    onPressed: _reiniciar,
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Jugar de nuevo'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.pink,
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextButton(
+                    onPressed: () => context.go('/juegos-chicas'),
+                    child: const Text('Volver al juegos para chicas'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        },
+        initialActiveOverlays: const ['hud'],
+      ),
     );
-    add(bebe);
-
-    // Primer objeto que cae
-    _spawnObjeto();
-  }
-
-  void _spawnObjeto() {
-    if (juegoTerminado) return;
-    final esBiberon = _random.nextBool();
-    add(
-      ObjetoCayendo(
-      nombreAsset: esBiberon ? 'biberon.png' : 'osito.png',
-      posicionX: _random.nextDouble() * (size.x - 60),
-      onAtrapar: () {
-        puntuacion++;
-        _spawnObjeto();
-      },
-      onPerdido: () {
-        vidas--;
-        if (vidas <= 0) {
-          juegoTerminado = true;
-          overlays.add('gameOver');
-        }
-        _spawnObjeto();
-      },
-      bebeRef: bebe,
-      gameSize: size,
-    ));
-  }
-
-  @override
-  void onHorizontalDragUpdate(DragUpdateInfo info) {
-    bebe.position.x += info.delta.global.x;
-    bebe.position.x = bebe.position.x.clamp(0, size.x - 100);
   }
 }
+ 
