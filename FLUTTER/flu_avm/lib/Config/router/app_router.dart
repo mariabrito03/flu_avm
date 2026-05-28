@@ -53,6 +53,13 @@ final appRouter = GoRouter(
     builder: (context, state) => const JuegosChicasScreen(),
   ),
 
+/*
+   
+   GoRoute(
+    path: '/juego-bebe',
+    builder: (context, state) => const JuegoBebeScreen(),
+  ),
+*/
   ],
 );
 

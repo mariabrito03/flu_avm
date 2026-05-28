@@ -36,12 +36,4 @@ flutter:
   assets:
     - assets/iconos/
     - assets/
-    - assets/movil.png
-    - assets/puntos.png
-    - assets/servidor.png
-    - assets/mapa.jpg
-    - assets/votaciones.jpg
-    - assets/bebe.png
-    - assets/biberon.png
-    - assets/osito.png
-    - assets/cocina.jpg
+    - assets/videos/

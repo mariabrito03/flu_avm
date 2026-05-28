@@ -48,7 +48,9 @@ const appMenuItems = <MenuItem>[
       titulus: 'Juegos Chicas',
       subtitulus: 'Minijuego con Flame',
       link: '/juegos-chicas',
-      icon: Icons.games,
+      icon: Icons.girl_outlined,
     ),
 
 ];
+
+//star_purple500_rounded
