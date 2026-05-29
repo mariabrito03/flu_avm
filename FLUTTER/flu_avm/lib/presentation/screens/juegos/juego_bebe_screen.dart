@@ -72,10 +72,10 @@ class _JuegoBebeScreenState extends State<JuegoBebeScreen> {
                   ),
                   const SizedBox(height: 12),
                   OutlinedButton.icon(
-                    onPressed: () {
-                      (game as CatchGame).resumeEngine();
-                      _reiniciar();
-                    },
+              onPressed: () {
+                  (game as CatchGame).reanudarJuego();  // ← usa reanudarJuego()
+                  game.overlays.remove('pauseMenu');
+                  },
                     icon: const Icon(Icons.refresh, color: Colors.pink),
                     label: const Text(
                       'Reiniciar',

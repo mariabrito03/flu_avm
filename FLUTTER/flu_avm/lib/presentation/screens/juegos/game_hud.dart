@@ -58,13 +58,14 @@ class GameHud extends StatelessWidget {
             // Botón pause
             IconButton(
               onPressed: () {
-                if (game.paused) {
-                  game.resumeEngine();
-                  game.overlays.remove('pauseMenu');
-                } else {
-                  game.pauseEngine();
-                  game.overlays.add('pauseMenu');
-                }
+                    if (game.paused) {
+                      game.reanudarJuego();        // ← usa reanudarJuego()
+                      game.overlays.remove('pauseMenu');
+                    } else {
+                      game.pausarJuego();          // ← usa pausarJuego()
+                      game.overlays.add('pauseMenu');
+                    }
+
               },
               icon: Icon(
                 game.paused ? Icons.play_arrow : Icons.pause,

@@ -34,49 +34,64 @@ class _JuegosChicasScreenState extends State<JuegosChicasScreen> {
     return Scaffold(
       body: Stack(
         children: [
-            SizedBox.expand(
-              child: FittedBox(
-                fit: BoxFit.cover,
-                child: SizedBox(
-                  width: _controller.value.size.width,
-                  height: _controller.value.size.height,
-                  child: VideoPlayer(_controller),
-                ),
-              ),
-            ),
 
-      SafeArea(
-  child: Expanded(
-    child: Column(
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(60),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                crossAxisSpacing: 60,
-                mainAxisSpacing: 60,
-                childAspectRatio: 1,
+          // Video de fondo
+          SizedBox.expand(
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child: SizedBox(
+                width: _controller.value.size.width,
+                height: _controller.value.size.height,
+                child: VideoPlayer(_controller),
               ),
-              itemCount: 12,
-              itemBuilder: (context, index) {
-                final esJuegoBebe = index == 0;
-                return _GameCard(
-                  index: index,
-                  esJuegoBebe: esJuegoBebe,
-                );
-              },
             ),
           ),
-        ),
-      ],
-    ),
-  ),
-),
+
+          // Contenido encima del video
+          SafeArea(
+            child: Column(
+              children: [
+
+                // Botón volver atrás
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: IconButton(
+                      onPressed: () => context.go('/home'),
+                      icon: const Icon(Icons.arrow_back, color: Colors.white),
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.pink.withValues(alpha: 0.7),
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Grid de juegos
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        crossAxisSpacing: 60,
+                        mainAxisSpacing: 60,
+                        childAspectRatio: 1,
+                      ),
+                      itemCount: 12,
+                      itemBuilder: (context, index) {
+                        final esJuegoBebe = index == 0;
+                        return _GameCard(
+                          index: index,
+                          esJuegoBebe: esJuegoBebe,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
 
         ],
       ),
@@ -97,7 +112,6 @@ class _GameCard extends StatelessWidget {
         if (esJuegoBebe) {
           context.push('/juego-bebe');
         } else {
-       
           showDialog(
             context: context,
             builder: (_) => AlertDialog(
@@ -116,15 +130,17 @@ class _GameCard extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 247, 202, 217).withOpacity(0.3),
+          color: const Color.fromARGB(255, 247, 202, 217).withValues(alpha: 0.3),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: esJuegoBebe ? const Color.fromRGBO(239, 176, 197, 1) : Colors.white54,
+            color: esJuegoBebe
+                ? const Color.fromRGBO(239, 176, 197, 1)
+                : Colors.white54,
             width: esJuegoBebe ? 3 : 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color.fromARGB(255, 247, 202, 217).withOpacity(0.3),
+              color: const Color.fromARGB(255, 247, 202, 217).withValues(alpha: 0.3),
               blurRadius: 8,
             ),
           ],
@@ -135,11 +151,13 @@ class _GameCard extends StatelessWidget {
             Icon(
               esJuegoBebe ? Icons.child_care : Icons.lock,
               size: 40,
-              color: esJuegoBebe ? const Color.fromARGB(255, 245, 200, 215) : Colors.white54,
+              color: esJuegoBebe
+                  ? const Color.fromARGB(255, 245, 200, 215)
+                  : Colors.white54,
             ),
             const SizedBox(height: 8),
             Text(
-              esJuegoBebe ? 'Alimenta al bebe' : 'minijuego',
+              esJuegoBebe ? 'Alimenta al bebé' : 'minijuego',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: esJuegoBebe ? Colors.white : Colors.white54,
